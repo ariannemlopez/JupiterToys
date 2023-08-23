@@ -22,3 +22,20 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task testAll() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty','--glue', 'step_definitions', 'src/test/step_definitions']
+        }
+    }
+}
