@@ -16,26 +16,9 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.11.0'
     testImplementation 'io.cucumber:cucumber-junit:7.13.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
-
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.10.0'
 }
 
 test {
     useJUnitPlatform()
-}
-
-configurations {
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
-}
-
-task testAll() {
-    dependsOn assemble, testClasses
-    doLast {
-        javaexec {
-            main = "io.cucumber.core.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty','--glue', 'step_definitions', 'src/test/step_definitions']
-        }
-    }
 }
